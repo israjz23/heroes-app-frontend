@@ -144,7 +144,7 @@ export const HeroGridCard = ({ hero }: Props) => {
           <h4 className="font-medium text-sm">Powers:</h4>
           <div className="flex flex-wrap gap-1">
             {hero.powers.slice(0, 3).map((power) => (
-              <Badge variant="outline" className="text-xs">
+              <Badge variant="outline" className="text-xs" key={power}>
                 {power}
               </Badge>
             ))}
