@@ -1,5 +1,5 @@
 import { use } from 'react';
-import { beforeEach, describe, expect, test } from 'vitest';
+import { describe, expect, test, vi, beforeEach } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
 import {
   FavoriteHeroContext,
@@ -11,6 +11,16 @@ const mockHero = {
   id: '1',
   name: 'batman',
 } as Hero;
+
+const localStorageMock = {
+  getItem: vi.fn(),
+  setItem: vi.fn(),
+  clear: vi.fn(),
+};
+
+Object.defineProperty(window, 'localStorage', {
+  value: localStorageMock,
+});
 
 const TestComponent = () => {
   const { favoriteCount, favorites, isFavorite, toggleFavorite } =
@@ -49,7 +59,7 @@ const renderContextTest = () => {
 
 describe('FavoriteHeroContext', () => {
   beforeEach(() => {
-    localStorage.clear();
+    vi.clearAllMocks();
   });
 
   test('should initialize with default values', () => {
@@ -68,13 +78,16 @@ describe('FavoriteHeroContext', () => {
     expect(screen.getByTestId('favorite-count').textContent).toBe('1');
     expect(screen.getByTestId('is-favorite').textContent).toBe('true');
     expect(screen.getByTestId('hero-1').textContent).toBe('batman');
-    expect(localStorage.getItem('favorites')).toBe(
+
+    expect(localStorageMock.setItem).toHaveBeenCalled();
+    expect(localStorageMock.setItem).toHaveBeenCalledWith(
+      'favorites',
       '[{"id":"1","name":"batman"}]'
     );
   });
 
   test('should remove hero from favorites when toggleFavorite is called', () => {
-    localStorage.setItem('favorites', JSON.stringify([mockHero]));
+    localStorageMock.getItem.mockReturnValue(JSON.stringify([mockHero]));
 
     renderContextTest();
     expect(screen.getByTestId('favorite-count').textContent).toBe('1');
@@ -87,5 +100,8 @@ describe('FavoriteHeroContext', () => {
     expect(screen.getByTestId('favorite-count').textContent).toBe('0');
     expect(screen.getByTestId('is-favorite').textContent).toBe('false');
     expect(screen.queryByTestId('hero-1')).toBeNull();
+
+    expect(localStorageMock.setItem).toHaveBeenCalled();
+    expect(localStorageMock.setItem).toHaveBeenCalledWith('favorites', '[]');
   });
 });
