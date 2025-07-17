@@ -63,4 +63,14 @@ describe('appRouter', () => {
 
     expect(await screen.findByTestId('search-page')).toBeDefined();
   });
+
+  test('should redirect to home page for unknown routes', () => {
+    const router = createMemoryRouter(appRouter.routes, {
+      initialEntries: ['/otra-pagina-rara'],
+    });
+
+    render(<RouterProvider router={router} />);
+
+    expect(screen.getByTestId('home-page')).toBeDefined();
+  });
 });
