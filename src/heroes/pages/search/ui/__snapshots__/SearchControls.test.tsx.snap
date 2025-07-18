@@ -167,6 +167,7 @@ exports[`SearchControls > should render SearchControls with default values 1`] =
   <div
     data-orientation="vertical"
     data-slot="accordion"
+    data-testid="accordion"
   >
     <div
       class="border-b last:border-b-0"
