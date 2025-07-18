@@ -26,14 +26,7 @@ export const SearchPage = () => {
         description="Descubre, explora y administra super héroes y villanos"
       />
 
-      <CustomBreadcrumbs
-        currentPage="Buscador de héroes"
-        // breadcrumbs={[
-        //   { label: 'Home1', to: '/' },
-        //   { label: 'Home2', to: '/' },
-        //   { label: 'Home3', to: '/' },
-        // ]}
-      />
+      <CustomBreadcrumbs currentPage="Buscador de héroes" />
 
       {/* Stats Dashboard */}
       <HeroStats />
